@@ -30,3 +30,17 @@ func GetRandomWord(path string) string {
 	r := rand.Intn(len(words))
 	return words[r]
 }
+
+func GetRandomLettersInWord(word string) string {
+	var randomLetters string
+
+	rand.Seed(time.Now().UnixNano())
+
+	for i := 0; i < len(word)/2-1; i++ {
+
+		rand := rand.Intn(len(word))
+
+		randomLetters += string(word[rand])
+	}
+	return randomLetters
+}
