@@ -31,16 +31,12 @@ func GetRandomWord(path string) string {
 	return words[r]
 }
 
-func GetRandomLettersInWord(word string) string {
-	var randomLetters string
-
+func GetRandomLettersInWord(toFind string) string {
+	var randomLetter string
 	rand.Seed(time.Now().UnixNano())
-
-	for i := 0; i < len(word)/2-1; i++ {
-
-		rand := rand.Intn(len(word))
-
-		randomLetters += string(word[rand])
+	for i := 0; i < len(toFind); i++ {
+		rand := rand.Intn(len(toFind))
+		randomLetter = string(toFind[rand])
 	}
-	return randomLetters
+	return randomLetter
 }

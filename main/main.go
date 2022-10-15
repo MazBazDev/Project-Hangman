@@ -25,7 +25,7 @@ var GameData HangmanData
 
 func main() {
 	GameData.WordToFind = hangman.GetRandomWord(hangmanWords)
-	GameData.Word = WordBegining(GameData.WordToFind)
+	WordBegining(GameData.WordToFind)
 
 	err := termbox.Init()
 	if err != nil {
@@ -166,10 +166,14 @@ func WordBegining(toFind string) string {
 	for range toFind {
 		GameData.Word += "_"
 	}
-	for i := 1; i <= len(toFind)/2-1; i++ {
-		ranLetter := hangman.GetRandomLettersInWord(toFind)
-		GameData.Word = AddLetter(ranLetter, toFind, GameData.Word)
-		GameData.PlayedLetters += ranLetter
+	n := len(toFind)/2 - 1
+	for i := 1; i <= n; i++ {
+		randLetter := hangman.GetRandomLettersInWord(toFind)
+		GameData.Word = AddLetter(randLetter, toFind, GameData.Word)
+
+		if !strings.Contains(GameData.PlayedLetters, randLetter) {
+			GameData.PlayedLetters += randLetter
+		}
 	}
 	return GameData.Word
 }
