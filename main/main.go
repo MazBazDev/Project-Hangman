@@ -61,19 +61,15 @@ mainloop:
 					NavigateTo(1)
 				}
 			case termbox.KeyEnter:
-				if len(GameData.CurrentLetter) == 1 {
+				if len(GameData.CurrentLetter) >= 1 {
 					Play()
 				}
 			case termbox.KeyBackspace2:
-				if len(GameData.CurrentLetter) == 1 {
-					GameData.CurrentLetter = ""
-					Refresh()
-				}
+				GameData.CurrentLetter = ""
+				Refresh()
 			case termbox.KeyDelete:
-				if len(GameData.CurrentLetter) == 1 {
-					GameData.CurrentLetter = ""
-					Refresh()
-				}
+				GameData.CurrentLetter = ""
+				Refresh()
 			default:
 				if GameData.Attempts == hangmanMaxAttempts || GameData.WordFinded {
 					break mainloop
@@ -81,13 +77,13 @@ mainloop:
 
 				for i := 'A'; i <= 'Z'; i++ {
 					if i == ev.Ch {
-						GameData.CurrentLetter = strings.ToLower(string(ev.Ch))
+						GameData.CurrentLetter += strings.ToLower(string(ev.Ch))
 						Refresh()
 					}
 				}
 				for i := 'a'; i <= 'z'; i++ {
 					if i == ev.Ch {
-						GameData.CurrentLetter = string(ev.Ch)
+						GameData.CurrentLetter += string(ev.Ch)
 						Refresh()
 					}
 				}
@@ -133,32 +129,43 @@ func NavigateTo(page int) {
 		hangman.PageHelp()
 	case 3:
 		GameData.CurrentPage = page
-		hangman.PageFinal(GameData.WordFinded, GameData.Attempts, GameData.WordToFind, hangman.GetHangPatern(hangmanPaterns, GameData.Attempts))
+		hangman.PageFinal(GameData.WordFinded, GameData.Attempts, GameData.Word, GameData.WordToFind, hangman.GetHangPatern(hangmanPaterns, GameData.Attempts))
 	}
 	NavBar()
 	termbox.Flush()
 }
 
 func Play() {
-	if !strings.Contains(GameData.PlayedLetters, GameData.CurrentLetter) {
-		if !strings.Contains(GameData.WordToFind, GameData.CurrentLetter) {
-			if GameData.Attempts == 9 {
+	if len(GameData.CurrentLetter) == 1 {
+		if !strings.Contains(GameData.PlayedLetters, GameData.CurrentLetter) {
+			if !strings.Contains(GameData.WordToFind, GameData.CurrentLetter) {
+				if GameData.Attempts == hangmanMaxAttempts-1 {
+					NavigateTo(3)
+				}
+				GameData.PlayedLetters += GameData.CurrentLetter
+				GameData.Attempts++
+			}
+
+			if GameData.WordToFind == AddLetter(GameData.CurrentLetter, GameData.WordToFind, GameData.Word) {
+				GameData.WordFinded = true
 				NavigateTo(3)
 			}
-			GameData.PlayedLetters += GameData.CurrentLetter
-			GameData.Attempts++
-		}
 
-		if GameData.WordToFind == AddLetter(GameData.CurrentLetter, GameData.WordToFind, GameData.Word) {
+			GameData.Word = AddLetter(GameData.CurrentLetter, GameData.WordToFind, GameData.Word)
+			GameData.CurrentLetter = ""
+		} else {
+			GameData.CurrentLetter = ""
+		}
+	} else {
+		if len(GameData.CurrentLetter) == len(GameData.WordToFind) && GameData.CurrentLetter == GameData.WordToFind {
 			GameData.WordFinded = true
 			NavigateTo(3)
+		} else {
+			GameData.Attempts++
+			GameData.CurrentLetter = ""
 		}
-
-		GameData.Word = AddLetter(GameData.CurrentLetter, GameData.WordToFind, GameData.Word)
-		GameData.CurrentLetter = ""
-	} else {
-		GameData.CurrentLetter = ""
 	}
+
 	Refresh()
 }
 

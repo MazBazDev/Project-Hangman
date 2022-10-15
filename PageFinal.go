@@ -2,7 +2,7 @@ package hangman
 
 import "strconv"
 
-func PageFinal(Status bool, Attempts int, WordToFind string, HangMan []string) {
+func PageFinal(Status bool, Attempts int, Word, WordToFind string, HangMan []string) {
 	if Status {
 		body := []string{
 			" __     __                                 _ ",
@@ -52,6 +52,9 @@ func PageFinal(Status bool, Attempts int, WordToFind string, HangMan []string) {
 			"      The word to find was:",
 			"      \"" + WordToFind + "\"",
 			"",
+			"      You finded:",
+			"      \"" + Word + "\"",
+			"",
 			"    Press any key on the keyboard",
 			"         to close the game",
 		}
@@ -59,6 +62,6 @@ func PageFinal(Status bool, Attempts int, WordToFind string, HangMan []string) {
 		for _, v := range end {
 			body = append(body, ""+v)
 		}
-		CreateBox(24, 94, 4, 0, "white", "black", "You lost !", "white", body, "white", 28)
+		CreateBox(26, 94, 4, 0, "white", "black", "You lost !", "white", body, "white", 28)
 	}
 }
