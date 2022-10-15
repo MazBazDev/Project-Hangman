@@ -19,11 +19,10 @@ type HangmanData struct {
 
 var hangmanPaterns string = "./files/hangman.txt"
 var hangmanWords string = "./files/words.txt"
-var hangmanMaxAttempts int = 10
-
 var GameData HangmanData
 
 func main() {
+	GameData.Attempts = 10
 	GameData.WordToFind = hangman.GetRandomWord(hangmanWords)
 	WordBegining(GameData.WordToFind)
 
@@ -71,7 +70,7 @@ mainloop:
 				GameData.CurrentLetter = ""
 				Refresh()
 			default:
-				if GameData.Attempts == hangmanMaxAttempts || GameData.WordFinded {
+				if GameData.Attempts == 0 || GameData.WordFinded {
 					break mainloop
 				}
 
@@ -110,7 +109,7 @@ func NavBar() {
 	body := []string{"Welcome               Game                   Help"}
 	hangman.CreateBox(3, 94, 0, 0, "white", "black", "Welcome", "white", body, "white", 21)
 	if !(GameData.CurrentPage > 2) {
-		hangman.TbPrint(selectedIndex, 1, "white", "black", ">>")
+		hangman.TbPrint(selectedIndex-1, 1, "white", "black", ">>")
 	}
 }
 
@@ -123,7 +122,7 @@ func NavigateTo(page int) {
 		hangman.PageWelcome()
 	case 1:
 		GameData.CurrentPage = page
-		hangman.PageGame(GameData.Attempts, GameData.Word, GameData.PlayedLetters, GameData.CurrentLetter, hangmanPaterns, hangmanMaxAttempts)
+		hangman.PageGame(GameData.Attempts, GameData.Word, GameData.PlayedLetters, GameData.CurrentLetter, hangmanPaterns)
 	case 2:
 		GameData.CurrentPage = page
 		hangman.PageHelp()
@@ -139,11 +138,11 @@ func Play() {
 	if len(GameData.CurrentLetter) == 1 {
 		if !strings.Contains(GameData.PlayedLetters, GameData.CurrentLetter) {
 			if !strings.Contains(GameData.WordToFind, GameData.CurrentLetter) {
-				if GameData.Attempts == hangmanMaxAttempts-1 {
+				if GameData.Attempts == 1 {
 					NavigateTo(3)
 				}
 				GameData.PlayedLetters += GameData.CurrentLetter
-				GameData.Attempts++
+				GameData.Attempts--
 			}
 
 			if GameData.WordToFind == AddLetter(GameData.CurrentLetter, GameData.WordToFind, GameData.Word) {
@@ -161,7 +160,7 @@ func Play() {
 			GameData.WordFinded = true
 			NavigateTo(3)
 		} else {
-			GameData.Attempts++
+			GameData.Attempts--
 			GameData.CurrentLetter = ""
 		}
 	}

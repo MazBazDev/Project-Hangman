@@ -12,7 +12,7 @@ func PageFinal(Status bool, Attempts int, Word, WordToFind string, HangMan []str
 			"    | | (_) | |_| |  \\ V  V / (_) | | | | |_|",
 			"    |_|\\___/ \\__,_|   \\_/\\_/ \\___/|_| |_| (_)",
 			"",
-			"         You find \"" + WordToFind + "\" in " + strconv.Itoa(Attempts) + " attempts",
+			"         You find \"" + WordToFind + "\" with " + strconv.Itoa(Attempts) + " left",
 			"",
 		}
 

@@ -8,9 +8,9 @@ import (
 	"strings"
 )
 
-func PageGame(Attempts int, word, PlayedLetters, CurrentLetter, hangmanPaternsPath string, maxAttempts int) {
+func PageGame(Attempts int, word, PlayedLetters, CurrentLetter, hangmanPaternsPath string) {
 	body := []string{
-		"You have " + strconv.Itoa(maxAttempts) + " attempts to find this word",
+		"You have 10 attempts to find this word",
 		"       Good luck and Have Fun ;)",
 	}
 
@@ -24,7 +24,7 @@ func PageGame(Attempts int, word, PlayedLetters, CurrentLetter, hangmanPaternsPa
 }
 
 func GetHangPatern(path string, step int) []string {
-	step = step - 1
+	step = (9) - step
 
 	var fileLines []string
 
@@ -56,7 +56,13 @@ func HangBox(hangman []string) {
 }
 
 func AttemptsBox(attempts int) {
-	CreateBox(3, 19, 4, 75, "white", "black", "Attempts", "white", []string{strconv.Itoa(attempts)}, "white", 8)
+	var mRight int
+	if attempts == 10 {
+		mRight = 7
+	} else {
+		mRight = 8
+	}
+	CreateBox(3, 19, 4, 75, "white", "black", "Attempts", "white", []string{strconv.Itoa(attempts)}, "white", mRight)
 }
 
 func DisplayWord(word string) {
@@ -68,7 +74,7 @@ func DisplayPlayedLetters(PlayedLetters string) {
 }
 
 func DisplayCurrentLetter(CurrentLetter string) {
-	CreateBox(5, 70, 15, 0, "white", "black", "Press \"ENTER\" to try you'r letter", "white", []string{"", CurrentLetter}, "white", 28)
+	CreateBox(5, 70, 15, 0, "white", "black", "Press \"ENTER\" to try you'r letter/word", "white", []string{"", CurrentLetter}, "white", 28)
 }
 
 func WordState(letter, toFind, word string) string {

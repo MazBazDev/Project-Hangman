@@ -5,7 +5,7 @@ func PageWelcome() {
 		"",
 		"Welcome to HangMan Termbox version.",
 		"Good luck to you !",
-		"/!\\ PLEASE NOTE: each letter entered is final!",
+		"/!\\ PLEASE NOTE: each letter/word entered is final!",
 		"Press \"Enter\" to confirm your choice.",
 		"By ANNEG Noemie & YAKOUBEN Mazigh"}
 
