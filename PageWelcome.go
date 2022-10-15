@@ -9,5 +9,5 @@ func PageWelcome() {
 		"Appuyez sur \"Entrer\" pour confirmer votre choix.",
 		"By ANNEG Noemie & YAKOUBEN Mazigh"}
 
-	CreateBox(9, 70, 5, 0, "white", "black", "Welcome", "white", body, "white", 5)
+	CreateBox(9, 94, 4, 0, "white", "black", "Welcome", "white", body, "white", 5)
 }

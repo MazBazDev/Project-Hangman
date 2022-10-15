@@ -5,9 +5,9 @@ import (
 	"github.com/nsf/termbox-go"
 )
 
-func TbPrint(row, col int, fg, bg termbox.Attribute, text string) {
+func TbPrint(row, col int, FontColor, BackGroundColor string, text string) {
 	for _, letter := range text {
-		termbox.SetCell(row, col, letter, fg, bg)
+		termbox.SetCell(row, col, letter, colorPicker(FontColor), colorPicker(BackGroundColor))
 		row += runewidth.RuneWidth(letter)
 	}
 }
