@@ -234,7 +234,11 @@ func Play() {
 			hangman.GameData.WordFinded = true
 			NavigateTo(3)
 		} else {
-			hangman.GameData.Attempts--
+			if hangman.GameData.Attempts == 1 {
+				hangman.GameData.Attempts--
+			} else {
+				hangman.GameData.Attempts -= 2
+			}
 			hangman.GameData.CurrentLetter = ""
 			if hangman.GameData.Attempts == 0 {
 				NavigateTo(3)
