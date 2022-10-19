@@ -236,6 +236,9 @@ func Play() {
 		} else {
 			hangman.GameData.Attempts--
 			hangman.GameData.CurrentLetter = ""
+			if hangman.GameData.Attempts == 0 {
+				NavigateTo(3)
+			}
 		}
 	}
 
@@ -273,5 +276,5 @@ func AddLetter(letter string, toFind string, word string) string {
 
 func EndGame() {
 	termbox.Close()
-	hangman.DeleteSaveIfWin()
+	hangman.DeleteSaveIfWinOrLoose()
 }

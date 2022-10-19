@@ -74,13 +74,16 @@ func GetPathFromIndex(path string, index int) string {
 	return path + temp
 }
 
-func DeleteSaveIfWin() {
-	if GameData.WordFinded && GameData.CurrentSavesPath != "" {
+func DeleteSaveIfWinOrLoose() {
+	if (GameData.WordFinded || GameData.Attempts == 0) && GameData.CurrentSavesPath != "" {
 		os.Remove(GameData.CurrentSavesPath)
 	}
 }
 
 func AskSaveGame() bool {
+	if GameData.Attempts == 0 {
+		return false
+	}
 	termbox.Clear(termbox.ColorBlack, termbox.ColorBlack)
 	var SelectIndex int
 	if !GameData.WordFinded {
@@ -111,7 +114,6 @@ func AskSaveGame() bool {
 				}
 			}
 		}
-
 	}
 
 	if SelectIndex == 0 {
