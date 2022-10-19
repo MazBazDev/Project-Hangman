@@ -7,23 +7,107 @@ import (
 	"github.com/nsf/termbox-go"
 )
 
-func InitGame() {
-	hangman.GameData.PaternsPath = "./files/hangman.txt"
-	hangman.GameData.DictionaryPath = "./files/words.txt"
-	hangman.GameData.Attempts = 10
-	hangman.GameData.WordToFind = hangman.GetRandomWord(hangman.GameData.DictionaryPath)
-}
 func main() {
-	InitGame()
+	hangman.GameData.PaternsPath = "./files/hangman.txt"
+	hangman.GameData.SavesPath = "./files/saves/"
+	hangman.GameData.DictionaryPath = "./files/dictionary/"
+	hangman.GameData.Attempts = 10
 
-	WordBegining(hangman.GameData.WordToFind)
+	Selector("saves")
+}
 
+func Selector(what string) {
+	var Files []string
+	var Title string
+	var Heigth int
+
+	if what == "dictionary" {
+		Files = hangman.ListFilesInFolder(hangman.GameData.DictionaryPath)
+		Title = "Select your dictionary"
+		Heigth = len(hangman.ListFilesInFolder(hangman.GameData.DictionaryPath))
+	} else if what == "saves" {
+		Files = hangman.ListFilesInFolder(hangman.GameData.SavesPath)
+		Title = "Press \"ESC\" to start a new game"
+		Heigth = len(hangman.ListFilesInFolder(hangman.GameData.SavesPath))
+
+	}
+
+	if len(Files) == 0 {
+		Selector("dictionary")
+	} else {
+		var Selectindex int
+		err := termbox.Init()
+		if err != nil {
+			panic(err)
+		}
+
+		defer NextStep(what)
+
+	mainloop:
+		for {
+			hangman.CreateBox(Heigth+2, 94, 0, 0, "white", "black", Title, "cyan", Files, "white", 4)
+			hangman.TbPrint(2, Selectindex+1, "white", "black", ">>")
+			if what == "saves" {
+				hangman.TbPrint(2, 10, "white", "black", "")
+			}
+			termbox.Flush()
+
+			switch ev := termbox.PollEvent(); ev.Type {
+			case termbox.EventKey:
+				switch ev.Key {
+				case termbox.KeyEsc:
+					break mainloop
+				case termbox.KeyArrowDown:
+					if Selectindex < len(Files)-1 {
+						Selectindex++
+					}
+				case termbox.KeyArrowUp:
+					if Selectindex > 0 {
+						Selectindex--
+					}
+				case termbox.KeyEnter:
+					if what == "dictionary" {
+						hangman.GameData.CurrentDictionaryPath = hangman.GetPathFromIndex(hangman.GameData.DictionaryPath, Selectindex)
+
+					} else if what == "saves" {
+						hangman.GameData.CurrentSavesPath = hangman.GetPathFromIndex(hangman.GameData.SavesPath, Selectindex)
+					}
+					break mainloop
+				}
+			}
+		}
+	}
+}
+
+func NextStep(what string) {
+	if what == "saves" {
+		if hangman.GameData.CurrentSavesPath == "" {
+			termbox.Close()
+			Selector("dictionary")
+		} else {
+			termbox.Close()
+			hangman.LoadSave(hangman.GameData.CurrentSavesPath)
+			StartGame()
+		}
+	} else if what == "dictionary" {
+		if hangman.GameData.CurrentDictionaryPath == "" {
+			termbox.Close()
+		} else {
+			termbox.Close()
+			hangman.GameData.WordToFind = hangman.GetRandomWord(hangman.GameData.CurrentDictionaryPath)
+			WordBegining(hangman.GameData.WordToFind)
+			StartGame()
+
+		}
+	}
+}
+func StartGame() {
 	err := termbox.Init()
 	if err != nil {
 		panic(err)
 	}
 
-	defer termbox.Close()
+	defer EndGame()
 
 	NavigateTo(0)
 mainloop:
@@ -32,7 +116,12 @@ mainloop:
 		case termbox.EventKey:
 			switch ev.Key {
 			case termbox.KeyEsc:
-				break mainloop
+				if hangman.AskSaveGame() {
+					hangman.CreateSave()
+					break mainloop
+				} else {
+					break mainloop
+				}
 			case termbox.KeyArrowRight:
 				switch hangman.GameData.CurrentPage {
 				case 0:
@@ -55,12 +144,9 @@ mainloop:
 				if len(hangman.GameData.CurrentLetter) >= 1 {
 					Play()
 				}
-			case termbox.KeyBackspace2:
+			case termbox.KeyBackspace2, termbox.KeyDelete:
 				hangman.GameData.CurrentLetter = ""
-				Refresh()
-			case termbox.KeyDelete:
-				hangman.GameData.CurrentLetter = ""
-				Refresh()
+				NavigateTo(hangman.GameData.CurrentPage)
 			default:
 				if hangman.GameData.Attempts == 0 || hangman.GameData.WordFinded {
 					break mainloop
@@ -69,22 +155,18 @@ mainloop:
 				for i := 'A'; i <= 'Z'; i++ {
 					if i == ev.Ch {
 						hangman.GameData.CurrentLetter += strings.ToLower(string(ev.Ch))
-						Refresh()
+						NavigateTo(hangman.GameData.CurrentPage)
 					}
 				}
 				for i := 'a'; i <= 'z'; i++ {
 					if i == ev.Ch {
 						hangman.GameData.CurrentLetter += string(ev.Ch)
-						Refresh()
+						NavigateTo(hangman.GameData.CurrentPage)
 					}
 				}
 			}
 		}
 	}
-}
-
-func Refresh() {
-	NavigateTo(hangman.GameData.CurrentPage)
 }
 
 func NavBar() {
@@ -157,7 +239,7 @@ func Play() {
 		}
 	}
 
-	Refresh()
+	NavigateTo(hangman.GameData.CurrentPage)
 }
 
 func WordBegining(toFind string) string {
@@ -187,4 +269,9 @@ func AddLetter(letter string, toFind string, word string) string {
 		}
 	}
 	return word
+}
+
+func EndGame() {
+	termbox.Close()
+	hangman.DeleteSaveIfWin()
 }
