@@ -2,6 +2,29 @@ package hangman
 
 import "strconv"
 
+// This function print a box
+func PageWelcome() {
+	body := []string{
+		"",
+		"Welcome to HangMan Termbox version.",
+		"Good luck to you !",
+		"/!\\ PLEASE NOTE: each letter/word entered is final!",
+		"Press \"Enter\" to confirm your choice.",
+		"By ANNEG Noemie & YAKOUBEN Mazigh"}
+
+	CreateBox(9, 94, 4, 0, "white", "black", "Welcome", "white", body, "white", 5)
+}
+
+func PageHelp() {
+	body := []string{
+		"",
+		"1. \"ESC\" to quit.",
+		"2. \"ENTER\" to confirm your choice.",
+		"3. \"BACKSPACE\" or \"DEL\" to delete the last letter.",
+	}
+	CreateBox(7, 94, 4, 0, "white", "black", "Help", "white", body, "white", 5)
+}
+
 func PageFinal(Status bool, Attempts int, Word, WordToFind string, HangMan []string) {
 	if Status {
 		body := []string{
