@@ -16,6 +16,7 @@ func main() {
 }
 
 func Selector(what string) {
+	termbox.Clear(termbox.ColorBlack, termbox.ColorBlack)
 	var Files []string
 	var Title string
 	var Heigth int
@@ -24,10 +25,16 @@ func Selector(what string) {
 		Files = hangman.ListFilesInFolder(hangman.GameData.DictionaryPath)
 		Title = "Select your dictionary"
 		Heigth = len(hangman.ListFilesInFolder(hangman.GameData.DictionaryPath))
+
 	} else if what == "saves" {
 		Files = hangman.ListFilesInFolder(hangman.GameData.SavesPath)
-		Title = "Press \"ESC\" to start a new game"
+		Title = "Select a save / New game"
 		Heigth = len(hangman.ListFilesInFolder(hangman.GameData.SavesPath))
+
+	} else if what == "ascii" {
+		Files = []string{"Oui", "Non"}
+		Title = "Press \"ESC\" to start a new game"
+		Heigth = 2
 
 	}
 
@@ -44,20 +51,18 @@ func Selector(what string) {
 
 	mainloop:
 		for {
-			hangman.CreateBox(Heigth+2, 94, 0, 0, "white", "black", Title, "cyan", Files, "white", 4)
-			hangman.TbPrint(2, Selectindex+1, "white", "black", ">>")
+			hangman.CreateBox(Heigth+3, 94, 0, 0, "white", "black", Title, "white", Files, "white", 4)
 
 			if what == "saves" {
-				hangman.TbPrint(2, 10, "white", "black", "")
+				hangman.TbPrint(Heigth+2, 1, "cyan", "black", "Create a new game")
 			}
 
+			hangman.TbPrint(2, Selectindex+1, "white", "black", ">>")
 			termbox.Flush()
 
 			switch ev := termbox.PollEvent(); ev.Type {
 			case termbox.EventKey:
 				switch ev.Key {
-				case termbox.KeyEsc:
-					break mainloop
 				case termbox.KeyArrowDown:
 					if Selectindex < len(Files)-1 {
 						Selectindex++
@@ -69,9 +74,16 @@ func Selector(what string) {
 				case termbox.KeyEnter:
 					if what == "dictionary" {
 						hangman.GameData.CurrentDictionaryPath = hangman.GetPathFromIndex(hangman.GameData.DictionaryPath, Selectindex)
-
 					} else if what == "saves" {
-						hangman.GameData.CurrentSavesPath = hangman.GetPathFromIndex(hangman.GameData.SavesPath, Selectindex)
+						if Selectindex != 0 {
+							hangman.GameData.CurrentSavesPath = hangman.GetPathFromIndex(hangman.GameData.SavesPath, Selectindex-1)
+						}
+					} else if what == "ascii" {
+						if Selectindex == 1 {
+							hangman.GameData.UseAscii = true
+						} else {
+							hangman.GameData.UseAscii = false
+						}
 					}
 					break mainloop
 				}
@@ -83,10 +95,8 @@ func Selector(what string) {
 func NextSelector(what string) {
 	if what == "saves" {
 		if hangman.GameData.CurrentSavesPath == "" {
-			termbox.Close()
 			Selector("dictionary")
 		} else {
-			termbox.Close()
 			hangman.LoadSave(hangman.GameData.CurrentSavesPath)
 			hangman.GameMain()
 		}
@@ -94,11 +104,11 @@ func NextSelector(what string) {
 		if hangman.GameData.CurrentDictionaryPath == "" {
 			termbox.Close()
 		} else {
-			termbox.Close()
 			hangman.GameData.WordToFind = hangman.GetRandomWord(hangman.GameData.CurrentDictionaryPath)
 			hangman.WordBegining(hangman.GameData.WordToFind)
-			hangman.GameMain()
-
+			Selector("ascii")
 		}
+	} else if what == "ascii" {
+		hangman.GameMain()
 	}
 }

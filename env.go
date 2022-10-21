@@ -13,6 +13,7 @@ type HangmanData struct {
 	DictionaryPath        string
 	CurrentDictionaryPath string
 	PaternsPath           string
+	UseAscii              bool
 }
 
 var GameData HangmanData
