@@ -2,6 +2,7 @@ package main
 
 import (
 	"hangman"
+	"strings"
 
 	"github.com/nsf/termbox-go"
 )
@@ -10,6 +11,7 @@ func main() {
 	hangman.GameData.PaternsPath = "./files/hangman.txt"
 	hangman.GameData.SavesPath = "./files/saves/"
 	hangman.GameData.DictionaryPath = "./files/dictionary/"
+	hangman.GameData.AsciiPath = "./files/ascii/"
 	hangman.GameData.Attempts = 10
 
 	Selector("saves")
@@ -17,28 +19,41 @@ func main() {
 
 func Selector(what string) {
 	termbox.Clear(termbox.ColorBlack, termbox.ColorBlack)
-	var Files []string
+	var Rows []string
 	var Title string
 	var Heigth int
 
 	if what == "dictionary" {
-		Files = hangman.ListFilesInFolder(hangman.GameData.DictionaryPath)
+		Files := hangman.ListFilesInFolder(hangman.GameData.DictionaryPath)
+		for _, v := range Files {
+			Rows = append(Rows, strings.Replace(v, ".txt", "", -1))
+		}
 		Title = "Select your dictionary"
-		Heigth = len(hangman.ListFilesInFolder(hangman.GameData.DictionaryPath))
+		Heigth = len(Files)
 
 	} else if what == "saves" {
-		Files = hangman.ListFilesInFolder(hangman.GameData.SavesPath)
+		Files := hangman.ListFilesInFolder(hangman.GameData.SavesPath)
+		for _, v := range Files {
+			Rows = append(Rows, strings.Replace(v, ".json", "", -1))
+		}
 		Title = "Select a save / New game"
-		Heigth = len(hangman.ListFilesInFolder(hangman.GameData.SavesPath))
+		Heigth = len(Files)
 
 	} else if what == "ascii" {
-		Files = []string{"Oui", "Non"}
-		Title = "Press \"ESC\" to start a new game"
+		Rows = []string{"Oui", "Non"}
+		Title = "Use Ascii art design ?"
 		Heigth = 2
+	} else if what == "ascii2" {
+		Files := hangman.ListFilesInFolder(hangman.GameData.AsciiPath)
+		for _, v := range Files {
+			Rows = append(Rows, strings.Replace(v, ".txt", "", -1))
+		}
+		Title = "Select your Ascii theme"
+		Heigth = len(Files)
 
 	}
 
-	if len(Files) == 0 {
+	if len(Rows) == 0 {
 		Selector("dictionary")
 	} else {
 		var Selectindex int
@@ -51,10 +66,10 @@ func Selector(what string) {
 
 	mainloop:
 		for {
-			hangman.CreateBox(Heigth+3, 94, 0, 0, "white", "black", Title, "white", Files, "white", 4)
+			hangman.CreateBox(Heigth+2, 94, 0, 0, "white", "black", Title, "white", Rows, "white", 4)
 
 			if what == "saves" {
-				hangman.TbPrint(Heigth+2, 1, "cyan", "black", "Create a new game")
+				hangman.TbPrint(Heigth+2, 1, "cyan", "black", "Start a new game")
 			}
 
 			hangman.TbPrint(2, Selectindex+1, "white", "black", ">>")
@@ -64,7 +79,7 @@ func Selector(what string) {
 			case termbox.EventKey:
 				switch ev.Key {
 				case termbox.KeyArrowDown:
-					if Selectindex < len(Files)-1 {
+					if Selectindex < len(Rows)-1 {
 						Selectindex++
 					}
 				case termbox.KeyArrowUp:
@@ -79,11 +94,13 @@ func Selector(what string) {
 							hangman.GameData.CurrentSavesPath = hangman.GetPathFromIndex(hangman.GameData.SavesPath, Selectindex-1)
 						}
 					} else if what == "ascii" {
-						if Selectindex == 1 {
+						if Selectindex == 0 {
 							hangman.GameData.UseAscii = true
 						} else {
 							hangman.GameData.UseAscii = false
 						}
+					} else if what == "ascii2" {
+						hangman.GameData.CurrentAsciiPath = hangman.GetPathFromIndex(hangman.GameData.AsciiPath, Selectindex+1)
 					}
 					break mainloop
 				}
@@ -101,14 +118,17 @@ func NextSelector(what string) {
 			hangman.GameMain()
 		}
 	} else if what == "dictionary" {
-		if hangman.GameData.CurrentDictionaryPath == "" {
-			termbox.Close()
-		} else {
-			hangman.GameData.WordToFind = hangman.GetRandomWord(hangman.GameData.CurrentDictionaryPath)
-			hangman.WordBegining(hangman.GameData.WordToFind)
-			Selector("ascii")
-		}
+		hangman.GameData.WordToFind = hangman.GetRandomWord(hangman.GameData.CurrentDictionaryPath)
+		hangman.WordBegining(hangman.GameData.WordToFind)
+		Selector("ascii")
+
 	} else if what == "ascii" {
+		if hangman.GameData.UseAscii {
+			Selector("ascii2")
+		} else {
+			hangman.GameMain()
+		}
+	} else if what == "ascii2" {
 		hangman.GameMain()
 	}
 }
