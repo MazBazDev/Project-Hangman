@@ -59,7 +59,7 @@ func ListFilesInFolder(path string) []string {
 	f, err := os.Open(path)
 
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatalln(err, "path: ", path)
 	}
 
 	fileInfo, err := f.Readdir(-1)

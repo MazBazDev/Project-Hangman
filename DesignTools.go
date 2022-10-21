@@ -12,32 +12,32 @@ func CreateBox(rows, cols, marginTop, marginLeft int, boxColor, boxBg, title, ti
 			for row := 0; row < rows; row++ {
 				if row == 0 {
 					if col == 0 {
-						termbox.SetCell(row+marginLeft, col+marginTop, '╔', colorPicker(boxColor), colorPicker(boxBg))
+						termbox.SetCell(row+marginLeft, col+marginTop, '╔', ColorPicker(boxColor), ColorPicker(boxBg))
 					} else if col == cols-1 {
-						termbox.SetCell(row+marginLeft, col+marginTop, '╚', colorPicker(boxColor), colorPicker(boxBg))
+						termbox.SetCell(row+marginLeft, col+marginTop, '╚', ColorPicker(boxColor), ColorPicker(boxBg))
 					}
 				} else if row == (rows - 1) {
 					if col == 0 {
-						termbox.SetCell(row+marginLeft, col+marginTop, '╗', colorPicker(boxColor), colorPicker(boxBg))
+						termbox.SetCell(row+marginLeft, col+marginTop, '╗', ColorPicker(boxColor), ColorPicker(boxBg))
 					} else if col == cols-1 {
-						termbox.SetCell(row+marginLeft, col+marginTop, '╝', colorPicker(boxColor), colorPicker(boxBg))
+						termbox.SetCell(row+marginLeft, col+marginTop, '╝', ColorPicker(boxColor), ColorPicker(boxBg))
 					}
 				} else {
-					termbox.SetCell(row+marginLeft, col+marginTop, '═', colorPicker(boxColor), colorPicker(boxBg))
+					termbox.SetCell(row+marginLeft, col+marginTop, '═', ColorPicker(boxColor), ColorPicker(boxBg))
 				}
 			}
 			if len(title) > 0 {
 				sentence := "[ " + title + " ]"
 				for i := 0; i < len(sentence); i++ {
-					termbox.SetCell(marginLeft+3+i, marginTop, rune(sentence[i]), colorPicker(titleColor), colorPicker(boxBg))
+					termbox.SetCell(marginLeft+3+i, marginTop, rune(sentence[i]), ColorPicker(titleColor), ColorPicker(boxBg))
 				}
 			}
 		} else {
 			for row := 0; row < rows; row++ {
 				if row == 0 || row == (rows-1) {
-					termbox.SetCell(row+marginLeft, col+marginTop, '║', colorPicker(boxColor), colorPicker(boxBg))
+					termbox.SetCell(row+marginLeft, col+marginTop, '║', ColorPicker(boxColor), ColorPicker(boxBg))
 				} else {
-					termbox.SetCell(row+marginLeft, col+marginTop, ' ', colorPicker(boxColor), colorPicker(boxBg))
+					termbox.SetCell(row+marginLeft, col+marginTop, ' ', ColorPicker(boxColor), ColorPicker(boxBg))
 				}
 			}
 		}
@@ -45,19 +45,19 @@ func CreateBox(rows, cols, marginTop, marginLeft int, boxColor, boxBg, title, ti
 
 	for i, line := range lines {
 		for e, letter := range line {
-			termbox.SetCell(linesMarginLeft+marginLeft+1+e, marginTop+1+i, letter, colorPicker(lineColor), colorPicker(boxBg))
+			termbox.SetCell(linesMarginLeft+marginLeft+1+e, marginTop+1+i, letter, ColorPicker(lineColor), ColorPicker(boxBg))
 		}
 	}
 }
 
 func TbPrint(row, col int, FontColor, BackGroundColor string, text string) {
 	for _, letter := range text {
-		termbox.SetCell(row, col, letter, colorPicker(FontColor), colorPicker(BackGroundColor))
+		termbox.SetCell(row, col, letter, ColorPicker(FontColor), ColorPicker(BackGroundColor))
 		row += runewidth.RuneWidth(letter)
 	}
 }
 
-func colorPicker(color string) termbox.Attribute {
+func ColorPicker(color string) termbox.Attribute {
 	switch color {
 	case "black":
 		return termbox.ColorBlack

@@ -50,8 +50,10 @@ mainloop:
 					Play()
 				}
 			case termbox.KeyBackspace2, termbox.KeyDelete:
-				GameData.CurrentLetter = ""
-				NavigateTo(GameData.CurrentPage)
+				if len(GameData.CurrentLetter) > 0 {
+					GameData.CurrentLetter = GameData.CurrentLetter[:len(GameData.CurrentLetter)-1]
+					NavigateTo(GameData.CurrentPage)
+				}
 			default:
 				if GameData.Attempts == 0 || GameData.WordFinded {
 					break mainloop
