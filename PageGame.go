@@ -8,13 +8,25 @@ import (
 	"strings"
 )
 
+var asciiUpBoxes int
+var asciiUpBoxesHeigh int
+
 func PageGame(Attempts int, word, PlayedLetters, CurrentLetter, hangmanPaternsPath string) {
 	body := []string{
 		"You have 10 attempts to find this word",
 		"       Good luck and Have Fun ;)",
 	}
 
-	CreateBox(4, 70, 4, 0, "white", "black", "Info", "white", body, "white", 14)
+	if GameData.UseAscii {
+		asciiUpBoxesHeigh = 7
+		for _, v := range OneWordAsciiArt(GameData.WordToFind) {
+			if len(v) > asciiUpBoxes {
+				asciiUpBoxes = len(v)
+			}
+		}
+	}
+
+	CreateBox(4, 70+asciiUpBoxes, 4, 0, "white", "black", "Info", "white", body, "white", 14)
 
 	AttemptsBox(Attempts)
 	HangBox(GetHangPatern("./files/hangman.txt", Attempts))
@@ -52,29 +64,31 @@ func GetHangPatern(path string, step int) []string {
 }
 
 func HangBox(hangman []string) {
-	CreateBox(9, 19, 8, 75, "white", "black", "HangMan", "white", hangman, "white", 4)
+	CreateBox(9, 19, 8, 75+asciiUpBoxes, "white", "black", "HangMan", "white", hangman, "white", 4)
 }
 
 func AttemptsBox(attempts int) {
-	var mRight int
-	if attempts == 10 {
-		mRight = 7
-	} else {
-		mRight = 8
-	}
-	CreateBox(3, 19, 4, 75, "white", "black", "Attempts", "white", []string{strconv.Itoa(attempts)}, "white", mRight)
+	CreateBox(3, 19, 4, 75+asciiUpBoxes, "white", "black", "Attempts", "white", []string{strconv.Itoa(attempts)}, "white", (19/2)-(len(strconv.Itoa(attempts))/2)-1)
 }
 
 func DisplayWord(word string) {
-	CreateBox(5, 70, 9, 0, "white", "black", "Word", "white", []string{"", word}, "white", 28)
+	if GameData.UseAscii {
+		CreateBox(5+asciiUpBoxesHeigh, 70+asciiUpBoxes, 9, 0, "white", "black", "Word", "white", OneWordAsciiArt(GameData.Word), "white", 28)
+	} else {
+		CreateBox(5, 70, 9, 0, "white", "black", "Word", "white", []string{"", word}, "white", (70/2)-(len(word)/2)-2)
+	}
 }
 
 func DisplayPlayedLetters(PlayedLetters string) {
-	CreateBox(5, 19, 18, 75, "white", "black", "Letters", "white", []string{"", PlayedLetters}, "white", 2)
+	CreateBox(5, 19, 18, 75+asciiUpBoxes, "white", "black", "Letters", "white", []string{"", PlayedLetters}, "white", 2)
 }
 
 func DisplayCurrentLetter(CurrentLetter string) {
-	CreateBox(5, 70, 15, 0, "white", "black", "Press \"ENTER\" to try you'r letter/word", "white", []string{"", CurrentLetter}, "white", 28)
+	if GameData.UseAscii {
+		CreateBox(5+asciiUpBoxesHeigh, 70+asciiUpBoxes, 15+asciiUpBoxesHeigh, 0, "white", "black", "Press \"ENTER\" to try you'r letter/word", "white", OneWordAsciiArt(CurrentLetter), "white", 10)
+	} else {
+		CreateBox(5+asciiUpBoxesHeigh, 70+asciiUpBoxes, 15+asciiUpBoxesHeigh, 0, "white", "black", "Press \"ENTER\" to try you'r letter/word", "white", []string{"", CurrentLetter}, "white", (70/2)+asciiUpBoxes-(len(CurrentLetter)/2)-2)
+	}
 }
 
 func WordState(letter, toFind, word string) string {

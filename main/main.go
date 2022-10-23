@@ -19,9 +19,10 @@ func main() {
 
 func Selector(what string) {
 	termbox.Clear(termbox.ColorBlack, termbox.ColorBlack)
-	var Rows []string
+
 	var Title string
 	var Heigth int
+	var Rows []string
 
 	if what == "dictionary" {
 		Files := hangman.ListFilesInFolder(hangman.GameData.DictionaryPath)
@@ -32,12 +33,14 @@ func Selector(what string) {
 		Heigth = len(Files)
 
 	} else if what == "saves" {
+		Rows = []string{""}
+
 		Files := hangman.ListFilesInFolder(hangman.GameData.SavesPath)
 		for _, v := range Files {
 			Rows = append(Rows, strings.Replace(v, ".json", "", -1))
 		}
 		Title = "Select a save / New game"
-		Heigth = len(Files)
+		Heigth = len(Files) + 1
 
 	} else if what == "ascii" {
 		Rows = []string{"Oui", "Non"}
@@ -69,7 +72,7 @@ func Selector(what string) {
 			hangman.CreateBox(Heigth+2, 94, 0, 0, "white", "black", Title, "white", Rows, "white", 4)
 
 			if what == "saves" {
-				hangman.TbPrint(Heigth+2, 1, "cyan", "black", "Start a new game")
+				hangman.TbPrint(5, 1, "cyan", "black", "Start a new game")
 			}
 
 			hangman.TbPrint(2, Selectindex+1, "white", "black", ">>")
@@ -100,7 +103,7 @@ func Selector(what string) {
 							hangman.GameData.UseAscii = false
 						}
 					} else if what == "ascii2" {
-						hangman.GameData.CurrentAsciiPath = hangman.GetPathFromIndex(hangman.GameData.AsciiPath, Selectindex+1)
+						hangman.GameData.CurrentAsciiPath = hangman.GetPathFromIndex(hangman.GameData.AsciiPath, Selectindex)
 					}
 					break mainloop
 				}

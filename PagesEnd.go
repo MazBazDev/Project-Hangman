@@ -35,7 +35,7 @@ func PageFinal(Status bool, Attempts int, Word, WordToFind string, HangMan []str
 			"    | | (_) | |_| |  \\ V  V / (_) | | | | |_|",
 			"    |_|\\___/ \\__,_|   \\_/\\_/ \\___/|_| |_| (_)",
 			"",
-			"         You find \"" + WordToFind + "\" with " + strconv.Itoa(Attempts) + " attemps left",
+			"",
 			"",
 		}
 
@@ -53,6 +53,10 @@ func PageFinal(Status bool, Attempts int, Word, WordToFind string, HangMan []str
 			body = append(body, ""+v)
 		}
 		CreateBox(22, 94, 4, 0, "white", "black", "You won !", "white", body, "white", 22)
+
+		finalSentence := "You find \"" + WordToFind + "\" with " + strconv.Itoa(Attempts) + " attemps left"
+
+		TbPrint((94/2)-(len(finalSentence)/2)-1, 12, "white", "black", finalSentence)
 
 	} else {
 		body := []string{

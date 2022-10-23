@@ -58,17 +58,18 @@ mainloop:
 				if GameData.Attempts == 0 || GameData.WordFinded {
 					break mainloop
 				}
-
-				for i := 'A'; i <= 'Z'; i++ {
-					if i == ev.Ch {
-						GameData.CurrentLetter += strings.ToLower(string(ev.Ch))
-						NavigateTo(GameData.CurrentPage)
+				if len(GameData.CurrentLetter) <= len(GameData.WordToFind) {
+					for i := 'A'; i <= 'Z'; i++ {
+						if i == ev.Ch {
+							GameData.CurrentLetter += strings.ToLower(string(ev.Ch))
+							NavigateTo(GameData.CurrentPage)
+						}
 					}
-				}
-				for i := 'a'; i <= 'z'; i++ {
-					if i == ev.Ch {
-						GameData.CurrentLetter += string(ev.Ch)
-						NavigateTo(GameData.CurrentPage)
+					for i := 'a'; i <= 'z'; i++ {
+						if i == ev.Ch {
+							GameData.CurrentLetter += string(ev.Ch)
+							NavigateTo(GameData.CurrentPage)
+						}
 					}
 				}
 			}
