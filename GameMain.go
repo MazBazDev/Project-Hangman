@@ -6,6 +6,12 @@ import (
 	"github.com/nsf/termbox-go"
 )
 
+// --
+// This function retrieves all key press events.
+// - Change page if left/right arrows are pressed
+// - Ask to save the game if esc pressed,
+// - Do the logic of the game if a letter and enter are pressed...
+// --
 func GameMain() {
 	err := termbox.Init()
 	if err != nil {
@@ -77,6 +83,12 @@ mainloop:
 	}
 }
 
+// --
+// Parameters | Type
+// PlayedLetters | string
+// --
+// This function is the logic of the game, it checks all the data in the Game Data structure and applies all the rules of the game.
+// --
 func Play() {
 	if len(GameData.CurrentLetter) == 1 {
 		if !strings.Contains(GameData.PlayedLetters, GameData.CurrentLetter) {
@@ -120,6 +132,12 @@ func Play() {
 	NavigateTo(GameData.CurrentPage)
 }
 
+// --
+// Parameters | Type
+// toFind | string
+// --
+// This function return a string formated from the word to find with randoms letters and underscore.
+// --
 func WordBegining(toFind string) {
 	n := len(toFind)/2 - 1
 	tabIndex := []int{}
@@ -146,7 +164,15 @@ func WordBegining(toFind string) {
 	}
 }
 
-func AddLetter(letter string, toFind string, word string) string {
+// --
+// Parameters | Type
+// letters, toFind, Word | string
+// --
+// Return type : string
+// --
+// ??
+// --
+func AddLetter(letter, toFind, word string) string {
 	for _, v := range letter {
 		if !strings.Contains(GameData.PlayedLetters, letter) {
 			GameData.PlayedLetters += string(v)
@@ -163,6 +189,14 @@ func AddLetter(letter string, toFind string, word string) string {
 	}
 	return word
 }
+
+// --
+// Parameters | Type
+// tabInt | []int
+// n | int
+// --
+// ??
+// --
 func IntContains(tabInt []int, n int) bool {
 	var contains bool
 	for _, v := range tabInt {
@@ -173,10 +207,22 @@ func IntContains(tabInt []int, n int) bool {
 	return contains
 }
 
+// --
+// Parameters | Type
+// Word, toFind, letter | string
+// --
+// This function establishes a letter at the given index index
+// --
 func ReplaceAtIndex(word, toFind, letter string, i int) string {
 	return strings.Join([]string{word[:i], string(letter), word[i+1:]}, "")
 }
 
+// --
+// Parameters | Type
+// PlayedLetters | string
+// --
+// This function set the current error message
+// --
 func AddError(msg string) {
 	GameData.Error = msg
 }

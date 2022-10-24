@@ -2,6 +2,9 @@ package hangman
 
 import "github.com/nsf/termbox-go"
 
+// --
+// This function display the navigation bar
+// --
 func NavBar() {
 	var selectedIndex int
 	switch GameData.CurrentPage {
@@ -20,6 +23,12 @@ func NavBar() {
 	}
 }
 
+// --
+// Parameters | Type
+// Page | string
+// --
+// This function is used to switch from the current page to another page passed in parameter
+// --
 func NavigateTo(page int) {
 	termbox.Clear(termbox.ColorBlack, termbox.ColorBlack)
 

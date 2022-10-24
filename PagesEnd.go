@@ -15,6 +15,7 @@ func PageWelcome() {
 	CreateBox(9, 94, 4, 0, "white", "black", "Welcome", "white", body, "white", 5)
 }
 
+// This function print a box
 func PageHelp() {
 	body := []string{
 		"",
@@ -25,6 +26,18 @@ func PageHelp() {
 	CreateBox(7, 94, 4, 0, "white", "black", "Help", "white", body, "white", 5)
 }
 
+// --
+// Parameters | Type
+// Status | bool
+// Atempts | int
+// Word | string
+// WordToFind | string
+// Hangman | []string
+// --
+// Return type : []string
+// --
+// This function displays the final page with the current progress.
+// --
 func PageFinal(Status bool, Attempts int, Word, WordToFind string, HangMan []string) {
 	if Status {
 		body := []string{

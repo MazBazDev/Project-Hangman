@@ -1,5 +1,12 @@
 package hangman
 
+// --
+// Parameters | Type
+// toFind | string
+// line| int
+// --
+// ??
+// --
 func OneLineAsciiArt(toFind string, line int) string {
 	res := ""
 	tabToFind := []rune{}
@@ -13,6 +20,14 @@ func OneLineAsciiArt(toFind string, line int) string {
 	return res
 }
 
+// --
+// Parameters | Type
+// toFind | string
+// letter | rune
+// line| int
+// --
+// ??
+// --
 func OneLetterAsciiArt(toFind string, letter rune, line int) string {
 	tabLetter := GetAsciiPattern(GameData.CurrentAsciiPath, letter)
 	j := ""

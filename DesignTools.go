@@ -5,6 +5,14 @@ import (
 	"github.com/nsf/termbox-go"
 )
 
+// --
+// Parameters | Type
+// row, col, marginTop, marginLeft, linesMarginLeft| int
+// boxColor, boxBg, title, titleColor, lineColor | string
+// lines | []string
+// --
+// This function create a box and print an array of string in it
+// --
 func CreateBox(rows, cols, marginTop, marginLeft int, boxColor, boxBg, title, titleColor string, lines []string, lineColor string, linesMarginLeft int) {
 	rows, cols = cols, rows
 	for col := 0; col < cols; col++ {
@@ -50,13 +58,28 @@ func CreateBox(rows, cols, marginTop, marginLeft int, boxColor, boxBg, title, ti
 	}
 }
 
-func TbPrint(row, col int, FontColor, BackGroundColor string, text string) {
+// --
+// Parameters | Type
+// row, col| int
+// FontColor, BackgroundColor, text | string
+// --
+// This prints a string at the coordinates given in the settings
+// --
+func TbPrint(row, col int, FontColor, BackGroundColor, text string) {
 	for _, letter := range text {
 		termbox.SetCell(row, col, letter, ColorPicker(FontColor), ColorPicker(BackGroundColor))
 		row += runewidth.RuneWidth(letter)
 	}
 }
 
+// --
+// Parameters | Type
+// color | string
+// --
+// Return Type : termbox.Attribute
+// --
+// This function converts a written color to a termBox color
+// --
 func ColorPicker(color string) termbox.Attribute {
 	switch color {
 	case "black":

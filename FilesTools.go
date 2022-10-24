@@ -14,6 +14,14 @@ import (
 	"github.com/nsf/termbox-go"
 )
 
+// --
+// Parameters | Type
+// path | string
+// --
+// Return type : []string
+// --
+// This function returns all lines from a file
+// --
 func GetWords(path string) []string {
 	var fileLines []string
 	readFile, err := os.Open(path)
@@ -29,6 +37,14 @@ func GetWords(path string) []string {
 	return fileLines
 }
 
+// --
+// Parameters | Type
+// path | string
+// --
+// Return type : string
+// --
+// This function returns a random word from a file
+// --
 func GetRandomWord(path string) string {
 	words := GetWords(path)
 	rand.Seed(time.Now().UnixNano())
@@ -37,6 +53,14 @@ func GetRandomWord(path string) string {
 	return words[r]
 }
 
+// --
+// Parameters | Type
+// toFind | string
+// --
+// Return type : string
+// --
+// This function returns a random character from a string
+// --
 func GetRandomLettersInWord(toFind string) string {
 	var randomLetter string
 	rand.Seed(time.Now().UnixNano())
@@ -51,7 +75,9 @@ func GetRandomLettersInWord(toFind string) string {
 // Parameters | Type
 // path | string
 // --
-// This function returns an array containing all the filenames of the directory passed as parameter
+// Return type : []string
+// --
+// This function returns an array containing all the filenames of the directory passed as a parameter
 // --
 func ListFilesInFolder(path string) []string {
 	var files []string
@@ -76,7 +102,7 @@ func ListFilesInFolder(path string) []string {
 }
 
 // --
-// This function creates/updates a json file with current game settings
+// this function creates/updates a json file with current game settings
 // --
 func CreateSave() {
 	count := len(ListFilesInFolder(GameData.SavesPath))
@@ -101,7 +127,7 @@ func CreateSave() {
 // Parameters | Type
 // path | string
 // --
-// This function loads a save (json file), and sets the game parameters from the contents of the file
+// This function loads a backup (json file), and sets the game parameters from the contents of the file
 // --
 func LoadSave(path string) {
 	content, err := ioutil.ReadFile(path)

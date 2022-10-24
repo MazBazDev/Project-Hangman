@@ -32,6 +32,7 @@ func PageGame(Attempts int, word, PlayedLetters, CurrentLetter, hangmanPaternsPa
 
 		DisplayInfo(body, "white")
 	}
+
 	AttemptsBox(Attempts)
 	HangBox(GetHangPatern(GameData.PaternsPath, Attempts))
 	DisplayWord(word)
@@ -70,14 +71,32 @@ func GetHangPatern(path string, step int) []string {
 	return fileLines
 }
 
+// --
+// Parameters | Type
+// hangman | []string
+// --
+// This function returns display the current state of the hangman
+// --
 func HangBox(hangman []string) {
 	CreateBox(9, 19, 8, 75+asciiUpBoxes, "white", "black", "HangMan", "white", hangman, "white", 4)
 }
 
+// --
+// Parameters | Type
+// attempts | int
+// --
+// This function display the current attempts left
+// --
 func AttemptsBox(attempts int) {
 	CreateBox(3, 19, 4, 75+asciiUpBoxes, "white", "black", "Attempts", "white", []string{strconv.Itoa(attempts)}, "white", (19/2)-(len(strconv.Itoa(attempts))/2)-1)
 }
 
+// --
+// Parameters | Type
+// word | string
+// --
+// This function display the word to find, with letters or with ascii art
+// --
 func DisplayWord(word string) {
 	if GameData.UseAscii {
 		CreateBox(5+asciiUpBoxesHeigh, 70+asciiUpBoxes, 9, 0, "white", "black", "Word", "white", OneWordAsciiArt(GameData.Word), "white", 28)
@@ -86,10 +105,22 @@ func DisplayWord(word string) {
 	}
 }
 
+// --
+// Parameters | Type
+// PlayedLetters | string
+// --
+// This function display all played letters
+// --
 func DisplayPlayedLetters(PlayedLetters string) {
 	CreateBox(5, 19, 18, 75+asciiUpBoxes, "white", "black", "Letters", "white", []string{"", PlayedLetters}, "white", 2)
 }
 
+// --
+// Parameters | Type
+// PlayedLetters | string
+// --
+// This function display the current letters
+// --
 func DisplayCurrentLetter(CurrentLetter string) {
 	if GameData.UseAscii {
 		CreateBox(5+asciiUpBoxesHeigh, 70+asciiUpBoxes, 15+asciiUpBoxesHeigh, 0, "white", "black", "Press \"ENTER\" to try your letter/word", "white", OneWordAsciiArt(CurrentLetter), "white", 10)
