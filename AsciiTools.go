@@ -5,7 +5,7 @@ package hangman
 // toFind | string
 // line| int
 // --
-// ??
+// This function return one line of a full word printed in ascii art characters
 // --
 func OneLineAsciiArt(toFind string, line int) string {
 	res := ""
@@ -26,7 +26,7 @@ func OneLineAsciiArt(toFind string, line int) string {
 // letter | rune
 // line| int
 // --
-// ??
+// This function returns one letter of a word in ascii art character
 // --
 func OneLetterAsciiArt(toFind string, letter rune, line int) string {
 	tabLetter := GetAsciiPattern(GameData.CurrentAsciiPath, letter)

@@ -170,7 +170,7 @@ func WordBegining(toFind string) {
 // --
 // Return type : string
 // --
-// ??
+// This function replaces a "_" by a letter in the word at the corresponding index if the letter is present in the word
 // --
 func AddLetter(letter, toFind, word string) string {
 	for _, v := range letter {
@@ -195,7 +195,7 @@ func AddLetter(letter, toFind, word string) string {
 // tabInt | []int
 // n | int
 // --
-// ??
+// This function returns true if the given number is already present in the tab (and false if it is not)
 // --
 func IntContains(tabInt []int, n int) bool {
 	var contains bool

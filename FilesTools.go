@@ -214,6 +214,12 @@ func AskSaveGame() bool {
 	}
 }
 
+// --
+// Parameters | Type
+// toFind | string
+// --
+// This function returns one word in ascii art characters
+// --
 func OneWordAsciiArt(toFind string) []string {
 	var temp []string
 	for line := 0; line <= 8; line++ {
@@ -222,6 +228,13 @@ func OneWordAsciiArt(toFind string) []string {
 	return temp
 }
 
+// --
+// Parameters | Type
+// path | string
+// letter | rune
+// --
+// This function returns the corresponding letter in a ascii art character
+// --
 func GetAsciiPattern(path string, letter rune) []string {
 	var fileLines []string
 	var index int = int(rune(letter)) - 32
