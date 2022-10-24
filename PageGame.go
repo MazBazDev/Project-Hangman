@@ -12,11 +12,6 @@ var asciiUpBoxes int
 var asciiUpBoxesHeigh int
 
 func PageGame(Attempts int, word, PlayedLetters, CurrentLetter, hangmanPaternsPath string) {
-	body := []string{
-		"You have 10 attempts to find this word",
-		"       Good luck and Have Fun ;)",
-	}
-
 	if GameData.UseAscii {
 		asciiUpBoxesHeigh = 7
 		for _, v := range OneWordAsciiArt(GameData.WordToFind) {
@@ -26,13 +21,25 @@ func PageGame(Attempts int, word, PlayedLetters, CurrentLetter, hangmanPaternsPa
 		}
 	}
 
-	CreateBox(4, 70+asciiUpBoxes, 4, 0, "white", "black", "Info", "white", body, "white", 14)
+	if GameData.Error != "" {
+		CreateBox(4, 70+asciiUpBoxes, 4, 0, "white", "black", "Info", "white", []string{"", GameData.Error}, "red", ((70/2)-(len(GameData.Error)/2)-1)+(asciiUpBoxes/2))
+	} else {
 
+		body := []string{
+			"You have 10 attempts to find this word",
+			"       Good luck and Have Fun ;)",
+		}
+
+		DisplayInfo(body, "white")
+	}
 	AttemptsBox(Attempts)
-	HangBox(GetHangPatern("./files/hangman.txt", Attempts))
+	HangBox(GetHangPatern(GameData.PaternsPath, Attempts))
 	DisplayWord(word)
 	DisplayPlayedLetters(PlayedLetters)
 	DisplayCurrentLetter(CurrentLetter)
+}
+func DisplayInfo(msg []string, TextColor string) {
+	CreateBox(4, 70+asciiUpBoxes, 4, 0, "white", "black", "Info", "white", msg, TextColor, ((70/2)-(len(msg[0])/2)-1)+(asciiUpBoxes/2))
 }
 
 func GetHangPatern(path string, step int) []string {
@@ -85,9 +92,9 @@ func DisplayPlayedLetters(PlayedLetters string) {
 
 func DisplayCurrentLetter(CurrentLetter string) {
 	if GameData.UseAscii {
-		CreateBox(5+asciiUpBoxesHeigh, 70+asciiUpBoxes, 15+asciiUpBoxesHeigh, 0, "white", "black", "Press \"ENTER\" to try you'r letter/word", "white", OneWordAsciiArt(CurrentLetter), "white", 10)
+		CreateBox(5+asciiUpBoxesHeigh, 70+asciiUpBoxes, 15+asciiUpBoxesHeigh, 0, "white", "black", "Press \"ENTER\" to try your letter/word", "white", OneWordAsciiArt(CurrentLetter), "white", 10)
 	} else {
-		CreateBox(5+asciiUpBoxesHeigh, 70+asciiUpBoxes, 15+asciiUpBoxesHeigh, 0, "white", "black", "Press \"ENTER\" to try you'r letter/word", "white", []string{"", CurrentLetter}, "white", (70/2)+asciiUpBoxes-(len(CurrentLetter)/2)-2)
+		CreateBox(5+asciiUpBoxesHeigh, 70+asciiUpBoxes, 15+asciiUpBoxesHeigh, 0, "white", "black", "Press \"ENTER\" to try your letter/word", "white", []string{"", CurrentLetter}, "white", (70/2)+asciiUpBoxes-(len(CurrentLetter)/2)-2)
 	}
 }
 

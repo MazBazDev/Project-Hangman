@@ -16,6 +16,7 @@ type HangmanData struct {
 	UseAscii              bool
 	AsciiPath             string
 	CurrentAsciiPath      string
+	Error                 string
 }
 
 var GameData HangmanData
