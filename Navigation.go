@@ -30,7 +30,7 @@ func NavBar() {
 // This function is used to switch from the current page to another page passed in parameter
 // --
 func NavigateTo(page int) {
-	termbox.Clear(termbox.ColorBlack, termbox.ColorBlack)
+	termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
 
 	switch page {
 	case 0:

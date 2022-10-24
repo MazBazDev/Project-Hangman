@@ -175,7 +175,7 @@ func AskSaveGame() bool {
 	if GameData.Attempts == 0 {
 		return false
 	}
-	termbox.Clear(termbox.ColorBlack, termbox.ColorBlack)
+	termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
 	var SelectIndex int
 	if !GameData.WordFinded {
 		err := termbox.Init()

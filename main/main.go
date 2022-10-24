@@ -18,7 +18,7 @@ func main() {
 }
 
 func Selector(what string) {
-	termbox.Clear(termbox.ColorBlack, termbox.ColorBlack)
+	termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
 
 	var Title string
 	var Heigth int
