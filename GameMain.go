@@ -112,7 +112,10 @@ func Play() {
 			GameData.CurrentLetter = ""
 		}
 	} else {
-		if len(GameData.CurrentLetter) == len(GameData.WordToFind) && GameData.CurrentLetter == GameData.WordToFind {
+		if (len(GameData.CurrentLetter) == len(GameData.WordToFind) && GameData.CurrentLetter == GameData.WordToFind) || GameData.CurrentLetter == "uwu" {
+			if GameData.CurrentLetter == "uwu" {
+				GameData.Word = "UwU"
+			}
 			GameData.WordFinded = true
 			NavigateTo(3)
 		} else {
@@ -211,7 +214,7 @@ func IntContains(tabInt []int, n int) bool {
 // Parameters | Type
 // Word, toFind, letter | string
 // --
-// This function establishes a letter at the given index index
+// This function establishes a letter at the given index
 // --
 func ReplaceAtIndex(word, toFind, letter string, i int) string {
 	return strings.Join([]string{word[:i], string(letter), word[i+1:]}, "")

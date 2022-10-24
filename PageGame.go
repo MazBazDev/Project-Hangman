@@ -5,9 +5,15 @@ import (
 	"log"
 	"os"
 	"strconv"
-	"strings"
 )
 
+// --
+// Parameters | Type
+// Atempts | int
+// word, PlayedLetters, CurrentLetter, hangmanPaternsPath | string
+// --
+// This function calls the function to create the model of the game page
+// --
 var asciiUpBoxes int
 var asciiUpBoxesHeigh int
 
@@ -39,10 +45,18 @@ func PageGame(Attempts int, word, PlayedLetters, CurrentLetter, hangmanPaternsPa
 	DisplayPlayedLetters(PlayedLetters)
 	DisplayCurrentLetter(CurrentLetter)
 }
+
 func DisplayInfo(msg []string, TextColor string) {
 	CreateBox(4, 70+asciiUpBoxes, 4, 0, "white", "black", "Info", "white", msg, TextColor, ((70/2)-(len(msg[0])/2)-1)+(asciiUpBoxes/2))
 }
 
+// --
+// Parameters | Type
+// path | string
+// step | int
+// --
+// This function returns one hangman pattern at a time gives step formatted as []string
+// --
 func GetHangPatern(path string, step int) []string {
 	step = (9) - step
 
@@ -127,20 +141,4 @@ func DisplayCurrentLetter(CurrentLetter string) {
 	} else {
 		CreateBox(5+asciiUpBoxesHeigh, 70+asciiUpBoxes, 15+asciiUpBoxesHeigh, 0, "white", "black", "Press \"ENTER\" to try your letter/word", "white", []string{"", CurrentLetter}, "white", (70/2)+asciiUpBoxes-(len(CurrentLetter)/2)-2)
 	}
-}
-
-func WordState(letter, toFind, word string) string {
-	tabToFind := []string{}
-	for _, v := range toFind {
-		tabToFind = append(tabToFind, string(v))
-	}
-
-	if strings.Contains(toFind, letter) {
-		for i, v := range tabToFind {
-			if v == letter {
-				word = strings.Join([]string{word[:i], string(letter), word[i+1:]}, "")
-			}
-		}
-	}
-	return word
 }
